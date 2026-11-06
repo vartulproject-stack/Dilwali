@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diwali Gift for Girlfriend</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #050505;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        #top-banner {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            text-align: center;
+            color: #ffd700;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        #sub-banner {
+            position: absolute;
+            top: 55px;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            font-size: 16px;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        #ui-container {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 65, 108, 0.6);
+        }
+
+        /* Modal Card Styling */
+        #modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            z-index: 100;
+            max-width: 320px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #modal.active {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #modal h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        #modal p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        #close-btn {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="top-banner">✨ Cutie ♥ Kuchupuchu ✨</div>
+    <div id="sub-banner">It's Diwali, so you gifted this to your girlfriend</div>
+
+    <div id="ui-container">
+        <button class="action-btn" id="draw-btn">Hold to Draw Rangoli</button>
+        <button class="action-btn" id="gift-btn">Open Card 💌</button>
+    </div>
+
+    <div id="modal">
+        <h3>Remember, You are Special</h3>
+        <p><strong>OUR RANGOLI:</strong><br>Colours, a little messy.<br>Your side was perfect, mine was a mess of colours, and somehow together it became the prettiest rangoli in the gali.</p>
+        <button id="close-btn">Keep Exploring</button>
+    </div>
+
+    <!-- Three.js Library CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Scene Setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0510);
+        scene.fog = new THREE.FogExp2(0x0a0510, 0.02);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 3, 7);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        document.body.appendChild(renderer.domElement);
+
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0xffeedd, 0.7);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffaa55, 1.2);
+        dirLight.position.set(5, 10, 5);
+        scene.add(dirLight);
+
+        // Ground (Street)
+        const groundGeo = new THREE.PlaneGeometry(20, 20);
+        const groundMat = new THREE.MeshStandardMaterial({ color: 0x222225, roughness: 0.8 });
+        const ground = new THREE.Mesh(groundGeo, groundMat);
+        ground.rotation.x = -Math.PI / 2;
+        scene.add(ground);
+
+        // Simple Couple Avatars (Placeholder shapes representing the couple)
+        const coupleGroup = new THREE.Group();
+        
+        const bodyMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+        const hairMat = new THREE.MeshStandardMaterial({ color: 0x111111 });
+        const dressMat = new THREE.MeshStandardMaterial({ color: 0xffaa00 });
+
+        // Person 1
+        const p1Head = new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16), hairMat);
+        p1Head.position.set(-0.2, 1.5, 0);
+        const p1Body = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.2, 0.8, 16), dressMat);
+        p1Body.position.set(-0.2, 0.9, 0);
+        coupleGroup.add(p1Head, p1Body);
+
+        // Person 2
+        const p2Head = new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16), hairMat);
+        p2Head.position.set(0.2, 1.5, 0);
+        const p2Body = new THREE.Mesh(new THREE.MeshStandardMaterial({ color: 0xffffff }), new THREE.CylinderGeometry(0.15, 0.2, 0.8, 16));
+        p2Body.position.set(0.2, 0.9, 0);
+        coupleGroup.add(p2Head, p2Body);
+
+        coupleGroup.position.set(0, 0, 1);
+        scene.add(coupleGroup);
+
+        // Rangoli Ring
+        const rangoliGeo = new THREE.RingGeometry(0.1, 1.2, 32);
+        const rangoliMat = new THREE.MeshBasicMaterial({ color: 0xff0055, side: THREE.DoubleSide, transparent: true, opacity: 0 });
+        const rangoli = new THREE.Mesh(rangoliGeo, rangoliMat);
+        rangoli.rotation.x = -Math.PI / 2;
+        rangoli.position.set(0, 0.01, -0.5);
+        scene.add(rangoli);
+
+        // Interaction Logic
+        let drawing = false;
+        const drawBtn = document.getElementById('draw-btn');
+        const giftBtn = document.getElementById('gift-btn');
+        const modal = document.getElementById('modal');
+        const closeBtn = document.getElementById('close-btn');
+
+        drawBtn.addEventListener('mousedown', () => { drawing = true; });
+        window.addEventListener('mouseup', () => { drawing = false; });
+        
+        // Touch events for mobile
+        drawBtn.addEventListener('touchstart', (e) => { e.preventDefault(); drawing = true; });
+        window.addEventListener('touchend', () => { drawing = false; });
+
+        giftBtn.addEventListener('click', () => {
+            modal.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        // Animation Loop
+        let clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            let time = clock.getElapsedTime();
+
+            // Rangoli Drawing effect
+            if (drawing && rangoli.material.opacity < 1) {
+                rangoli.material.opacity += 0.02;
+            } else if (!drawing && rangoli.material.opacity > 0 && rangoli.material.opacity < 1) {
+                // keep opacity if partially drawn or let it stay
+            }
+
+            // Gentle camera floating
+            camera.position.x = Math.sin(time * 0.2) * 0.5;
+            camera.lookAt(0, 1, 0);
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Window Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
